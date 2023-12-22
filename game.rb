@@ -5,14 +5,25 @@ require_relative 'board'
 
 # Game class definition
 class Game
-  attr_accessor :player1, :player2, :current_player
+  attr_accessor :players, :current_player
 
   def initialize
-    @player1 = Player.new('Bob', 'X')
-    @player2 = Player.new('Alice', 'O')
-    @current_player = rand(2) == 1 ? player1 : player2
+    @players = [Player.new('Bob', 'X'), Player.new('Alice', 'O')]
+    @current_player = rand(2) == 1 ? players[0] : players[1]
     @board = Board.new
+    @winner = nil
 
-    puts "Game Initialized, it's the turn of #{current_player.name} #{current_player.symbol}"
+    puts "\n#{current_player.name} it's your turn\n"
+    @board.show
+  end
+
+  def win?
+    win_symbol = @board.line?
+    if win_symbol
+      players.each { |player| @winner = player if player.symbol == win_symbol }
+      p "Congratulation #{@winner.name} you win!!!"
+      return win_symbol
+    end
+    false
   end
 end
