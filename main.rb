@@ -2,5 +2,4 @@
 
 require_relative 'game'
 
-game = Game.new
-p game.win?
+Game.new

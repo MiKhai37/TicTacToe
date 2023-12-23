@@ -1,15 +1,22 @@
 # frozen_string_literal: true
 
 # Board class definition
+# Manager cells and alignment of symbols
 class Board
   attr_reader :cells
 
   def initialize
     @neutral = ' '
-    @cells = Array.new(3) { Array.new(3, @neutral) }
-    @cells = [%w[O O O], [4, 5, 6], [7, 8, 9]]
+    init_cells
   end
 
+  def init_cells
+    @cells = Array.new(3) { Array.new(3, @neutral) }
+    @lines = [[@cells[0][0], @cells[1][1], @cells[2][2]],
+              [@cells[0][2], @cells[1][1], @cells[2][0]]] + @cells + @cells.transpose
+  end
+
+  # print the board in the console
   def show
     puts <<-BOARD
       -------
@@ -22,13 +29,13 @@ class Board
     BOARD
   end
 
-  def play(symbol, place)
-    @cells[place] = symbol
+  def place(symbol, coords)
+    @cells[coords[0]][coords[1]] = symbol
   end
 
-  def line?
-    diags = [[@cells[0][0], @cells[1][1], @cells[2][2]], [@cells[0][2], @cells[1][1], @cells[2][0]]]
-    (@cells + @cells.transpose + diags).each do |line|
+  # if a 3 symbols are aligned return the symbol else return false
+  def aligned_symbol?
+    @lines.each do |line|
       return line.uniq.first if line.uniq.length == 1 && line.uniq.first != @neutral
     end
     false
