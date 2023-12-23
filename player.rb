@@ -12,7 +12,11 @@ class Player
   end
 
   def win
-    puts "Congratulation #{@name} you win!!!"
+    puts "\nCongratulation #{@name} you win!!!"
     @score += 1
+  end
+
+  def to_s
+    "Player #{@name} (#{@symbol}) #{@score} wins"
   end
 end
